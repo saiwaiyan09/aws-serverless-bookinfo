@@ -1,0 +1,50 @@
+apply plugin: 'war'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+configurations {
+    lambdaRuntime
+    implementation.extendsFrom(lambdaRuntime)
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+    lambdaRuntime 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    lambdaRuntime 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+
+    providedCompile group:'javax.websocket', name:'javax.websocket-api', version:'1.1'
+    providedCompile group:'javax.ws.rs', name:'javax.ws.rs-api', version:'2.0'
+    providedCompile group:'javax.json', name:'javax.json-api', version:'1.0'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.annotation:javax.annotation-api:1.2'
+    providedCompile 'javax.inject:javax.inject:1'
+    providedCompile 'javax.enterprise.concurrent:javax.enterprise.concurrent-api:1.0'
+    providedCompile 'javax.enterprise:cdi-api:1.2'
+    providedCompile 'io.swagger:swagger-annotations:1.5.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 11
+}
+
+tasks.register('lambdaZip', Zip) {
+    dependsOn tasks.named('jar')
+    archiveFileName = 'reviews-lambda.zip'
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+
+    into('lib') {
+        from tasks.named('jar')
+        from(configurations.lambdaRuntime.filter { it.isFile() })
+    }
+}

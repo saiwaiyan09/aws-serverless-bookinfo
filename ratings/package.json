@@ -1,0 +1,13 @@
+{
+  "name": "bookinfo-ratings-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda handler for the Bookinfo Ratings service",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true
+}

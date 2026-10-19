@@ -1,0 +1,7 @@
+PLATFORMS
+  aarch64-linux
+  ruby
+  x86_64-linux
+
+BUNDLED WITH
+   2.5.3
